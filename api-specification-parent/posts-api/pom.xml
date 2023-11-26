@@ -5,9 +5,8 @@
     <artifactId>api-specification-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
+  <artifactId>posts-api</artifactId>
   
-  
-  <artifactId>user-web-api</artifactId>
   
   <build>
 		<plugins>
@@ -24,11 +23,11 @@
 						</goals>
 
 						<configuration>
-							<inputSpec>D:\Subha\socialmediaapp\api-specification-parent\api\user-api.yml</inputSpec>
+							<inputSpec>D:\Subha\socialmediaapp\api-specification-parent\api\posts-api.yml</inputSpec>
 							<generatorName>spring</generatorName>
 							<generateApiTests>false</generateApiTests>
-							<modelPackage>com.socialmedia.user.api.model</modelPackage>
-							<apiPackage>com.socialmedia.user.api</apiPackage>
+							<modelPackage>com.socialmedia.posts.api.model</modelPackage>
+							<apiPackage>com.socialmedia.posts.api</apiPackage>
 							<output>${project.build.directory}</output>
 							<generateSupportingFiles>true</generateSupportingFiles>
 							<configOptions>

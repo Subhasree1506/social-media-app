@@ -5,10 +5,7 @@
     <artifactId>api-specification-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  
-  
-  <artifactId>user-web-api</artifactId>
-  
+  <artifactId>auth-api</artifactId>
   <build>
 		<plugins>
 			<plugin>
@@ -24,11 +21,11 @@
 						</goals>
 
 						<configuration>
-							<inputSpec>D:\Subha\socialmediaapp\api-specification-parent\api\user-api.yml</inputSpec>
+							<inputSpec>D:\Subha\socialmediaapp\api-specification-parent\api\auth-api.yml</inputSpec>
 							<generatorName>spring</generatorName>
 							<generateApiTests>false</generateApiTests>
-							<modelPackage>com.socialmedia.user.api.model</modelPackage>
-							<apiPackage>com.socialmedia.user.api</apiPackage>
+							<modelPackage>com.socialmedia.auth.api.model</modelPackage>
+							<apiPackage>com.socialmedia.auth.api</apiPackage>
 							<output>${project.build.directory}</output>
 							<generateSupportingFiles>true</generateSupportingFiles>
 							<configOptions>

@@ -53,5 +53,7 @@
 
   <modules>
   	<module>user-web-api</module>
+  	<module>auth-api</module>
+  	<module>posts-api</module>
   </modules>
 </project>

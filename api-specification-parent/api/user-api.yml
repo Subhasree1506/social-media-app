@@ -7,8 +7,6 @@ info:
   description: 'This Users API exposes endpoints to register new users and also view details of the existing users. '
 servers:
   - url: 'http://localhost:3000'
-tags: 
-  - name: "User"
 paths:
   '/api/users/{userId}':
     parameters:
@@ -20,8 +18,6 @@ paths:
         description: ID of the user to be retrieved
     get:
       summary: Retreive User Endpoint
-      tags:
-         - "User"
       x-stoplight:
         id: ewjg2v076ti3d
       description: Endpoint to retrieve user details based on the user ID.
@@ -35,11 +31,9 @@ paths:
         '404':
           description: User Not Found
       operationId: get-api-users-userId
-  '/api/users':
+  /api/users:
     post:
       summary: Create User Endpoint
-      tags:
-         - "User"
       operationId: post-api-users
       responses:
         '201':
@@ -61,34 +55,6 @@ components:
   schemas:
     UserRegistrationRequest:
       type: object
-      properties:
-        username:
-          type: string
-          description: username of the User
-        email:
-          type: string
-          format: email
-          description: Email of the user
-        password:
-          type: string
-          description: Password of the User
-        fullname:
-          type: string
-          description: Fullname of the User
-        date_of_birth:
-          type: string
-          format: date
-          description: Date of birth of the User
-        gender:
-          type: string
-          enum:
-            - male
-            - female
-            - other
-          description: Gender of the User
-        bio:
-          type: string
-          description: The brief Biography of the User
       x-examples:
         Example 1:
           username: john_doe
@@ -106,6 +72,39 @@ components:
           date_of_birth: '1985-07-22'
           gender: female
           bio: Exploring the wonders of technology and beyond!
+      properties:
+        username:
+          type: string
+          description: username of the User
+        email:
+          type: string
+          format: email
+          description: Email of the user
+        password:
+          type: string
+          description: Password of the User
+          format: password
+          minLength: 8
+          maxLength: 15
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$]).{8,15}$'
+        fullname:
+          type: string
+          description: Fullname of the User
+        date_of_birth:
+          type: string
+          format: date
+          description: Date of birth of the User
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+          description: Gender of the User
+        bio:
+          type: string
+          description: The brief Biography of the User
+      description: ''
     UserDetailsResponse:
       type: object
       x-examples:
