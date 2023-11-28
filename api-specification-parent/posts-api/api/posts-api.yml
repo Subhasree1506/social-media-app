@@ -1,6 +1,6 @@
 openapi: 3.0.0
 x-stoplight:
-  id: ymmcwei7nuun2
+  id: t23tonsmxbnoy
 info:
   title: posts-api
   version: '1.0'
@@ -17,9 +17,9 @@ paths:
       summary: Retrieve  all posts with pagination
       tags:
         - Posts
-      operationId: get-api-posts
+      operationId: getPosts
       x-stoplight:
-        id: q16ttm88e42np
+        id: xcxs842x1l69b
       description: Endpoint for retrieving all the posts after authentication
       parameters:
         - schema:
@@ -45,46 +45,48 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  posts:
-                    type: array
-                    x-stoplight:
-                      id: 7tbtaxpdp0o3i
-                    items:
-                      $ref: '#/components/schemas/PostResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
     post:
       summary: Create a new Post
       tags:
         - Posts
-      operationId: post-api-posts
+      operationId: createPost
       responses:
         '201':
           description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Post created successfully
         '400':
           description: 'Bad Request, invalid input'
+          content:
+            application/json:
+              schema:
+                type: string
       x-stoplight:
-        id: jqmy70d3aod6g
+        id: hzbq19ineet0t
       description: Endpoint for creating a new social media post after authentication
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                postContent:
-                  $ref: '#/components/schemas/PostRequest'
+              $ref: '#/components/schemas/PostRequest'
         description: Request with post content
   '/api/posts/{postId}':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: postId
         in: path
         required: true
-        description: Id of the post to be retrieved
+        description: post Id
     get:
       summary: Retrieve a specific post
+      operationId: getPostById
       tags:
         - Posts
       responses:
@@ -93,19 +95,20 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  post:
-                    $ref: '#/components/schemas/PostResponse'
+                $ref: '#/components/schemas/PostResponse'
         '404':
           description: Post not found
+          content:
+            application/json:
+              schema:
+                type: string
     put:
       summary: Update a specific post
       tags:
         - Posts
-      operationId: put-api-posts-postId
+      operationId: updatePost
       x-stoplight:
-        id: wm7y757s7lvxs
+        id: wd37as4p4kult
       description: Update a specific post with postId
       requestBody:
         description: Updated text post details
@@ -113,29 +116,46 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                post:
-                  $ref: '#/components/schemas/PostRequest'
+              $ref: '#/components/schemas/PostRequest'
       responses:
         '200':
           description: Post Updated successfully
+          content:
+            application/json:
+              schema:
+                type: string
         '400':
           description: 'Bad Request, invalid input'
+          content:
+            application/json:
+              schema:
+                type: string
         '404':
           description: Post not found
+          content:
+            application/json:
+              schema:
+                type: string
     delete:
       summary: Delete a specific post
       tags:
         - Posts
-      operationId: delete-api-posts-postId
+      operationId: deletePost
       responses:
         '204':
           description: Post Deleted successfully
+          content:
+            application/json:
+              schema:
+                type: string
         '404':
           description: Post not found
+          content:
+            application/json:
+              schema:
+                type: string
       x-stoplight:
-        id: pkqi8v0kubcke
+        id: 7r0kr4hunkh0h
   '/api/posts/{postId}/comments':
     parameters:
       - schema:
@@ -150,27 +170,36 @@ paths:
       responses:
         '201':
           description: Comment added successfully
+          content:
+            application/json:
+              schema:
+                type: string
         '400':
           description: 'Bad Request, invalid input'
+          content:
+            application/json:
+              schema:
+                type: string
         '404':
           description: Post not Found
-      operationId: get-api-posts-postId-comment
+          content:
+            application/json:
+              schema:
+                type: string
+      operationId: addComment
       x-stoplight:
-        id: g7gkn0ikzta8g
+        id: xbd1wwg2c3w46
       description: Adds a comment for the a post whose Id is given
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                commentRequest:
-                  $ref: '#/components/schemas/Comments'
+              $ref: '#/components/schemas/Comments'
         description: Comment request
   '/api/posts/{postId}/likes':
     parameters:
       - schema:
-          type: string
+          type: integer
         name: postId
         in: path
         required: true
@@ -178,23 +207,28 @@ paths:
       summary: Add a Like to a post
       tags:
         - Posts
-      operationId: post-api-posts-postId-likes
+      operationId: addLike
       responses:
         '200':
           description: Like added successfully
+          content:
+            application/json:
+              schema:
+                type: string
         '404':
           description: Post not Found
+          content:
+            application/json:
+              schema:
+                type: string
       x-stoplight:
-        id: 386bjs9e19p74
+        id: yxzze8gwjhayk
       description: Adds a like to a post based on the post Id
       requestBody:
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                like:
-                  $ref: '#/components/schemas/Likes'
+              $ref: '#/components/schemas/Likes'
         description: Like request
 components:
   securitySchemes:
@@ -207,26 +241,26 @@ components:
     PostRequest:
       title: PostRequest
       x-stoplight:
-        id: crdo5fxnbv0jo
+        id: zwpkkzbmt753b
       type: object
       description: model to hold Posts content along with userId
       properties:
         postId:
           type: integer
           x-stoplight:
-            id: 3auhvmevq6z0x
+            id: 3khj5qb9y66sn
           format: int64
           description: Id of the post
         content:
           type: string
           x-stoplight:
-            id: n943qzyhvvnq8
+            id: mmqkqdn1x9gvi
           description: Post's Content
           maxLength: 500
         userId:
           type: integer
           x-stoplight:
-            id: c3gehqwj2itn3
+            id: 95gok130enhw0
           format: int64
           description: Id of user who creates the post
       required:
@@ -235,23 +269,23 @@ components:
     PostResponse:
       title: PostResponse
       x-stoplight:
-        id: 7v8bzemnzns6n
+        id: z60ctndzkooru
       type: object
       properties:
         postId:
           type: integer
           x-stoplight:
-            id: 2zvrwe25w8xbr
+            id: i2of5c3608vp3
           format: int64
           description: post id
         content:
           type: string
           x-stoplight:
-            id: z835ksm9tj3mf
+            id: 0kfychnkl6bxx
           description: post content
         comments:
           x-stoplight:
-            id: 1bhvtwjgkpf0c
+            id: zghwgxwyol3xk
           type: array
           description: Comments associated with the post
           items:
@@ -259,14 +293,14 @@ components:
         likes:
           type: array
           x-stoplight:
-            id: njaqcc5gqerbz
+            id: r99f7bi0p0tlx
           description: Likes associated with the post
           items:
             $ref: '#/components/schemas/Likes'
     Comments:
       title: Comment
       x-stoplight:
-        id: kmiom7cnokofw
+        id: pgwk15sfql94c
       type: object
       description: |
         Comment for a specific post
@@ -274,46 +308,46 @@ components:
         commentId:
           type: integer
           x-stoplight:
-            id: g5ph20z15naly
+            id: q7zrm1zikr35h
           format: int64
           nullable: false
         postId:
           type: integer
           x-stoplight:
-            id: ob2kh2xdyzy7d
+            id: di4yxsb6sjohx
           format: int64
           nullable: false
         userId:
           type: integer
           x-stoplight:
-            id: 1pm8ww2l7wgdc
+            id: joqqv0mzau1vi
           format: int64
           nullable: false
         value:
           type: string
           x-stoplight:
-            id: ypoga2dqgez4g
+            id: 6k5vfoirmmdg7
           maxLength: 500
           nullable: false
     Likes:
       title: Likes
       x-stoplight:
-        id: 8jmjebica4bqd
+        id: 2hli8m4120fwp
       type: object
       properties:
         likeId:
           type: integer
           x-stoplight:
-            id: 57izgjocjjwzy
+            id: 9ppj4v6yx7v7d
           format: int64
         postId:
           type: integer
           x-stoplight:
-            id: 9toh5brug00lz
+            id: r7mbac4cwy1qg
           format: int64
         userId:
           type: integer
           x-stoplight:
-            id: st0xni6e89z9j
+            id: 35md8fbef4z79
           format: int64
       description: Likes Object

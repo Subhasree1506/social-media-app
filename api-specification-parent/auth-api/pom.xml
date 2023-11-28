@@ -21,7 +21,8 @@
 						</goals>
 
 						<configuration>
-							<inputSpec>D:\Subha\socialmediaapp\api-specification-parent\api\auth-api.yml</inputSpec>
+							<!--<inputSpec>D:\Subha\socialmediaapp\social-media-app\api-specification-parent\api\auth-api.yml</inputSpec>-->
+							<inputSpec>${project.basedir}/api/auth-api.yml</inputSpec>
 							<generatorName>spring</generatorName>
 							<generateApiTests>false</generateApiTests>
 							<modelPackage>com.socialmedia.auth.api.model</modelPackage>

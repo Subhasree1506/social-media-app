@@ -4,35 +4,31 @@ x-stoplight:
 info:
   title: auth-api.yml
   version: '1.0'
-  description: 'This Auth API exposes endpoints to Authenticate User and return a token. '
 servers:
   - url: 'http://localhost:3000'
-tags: 
-  - name: "Auth"
+tags:
+  - name: Auth
 paths:
-  '/api/auth':
+  /api/auth:
     post:
       summary: ' Post request for autheniticating the user using username and password'
+      operationId: authenticateUser
       tags:
-        - "Auth"
-      operationId: post-api-auth
+        - Auth
       responses:
         '200':
           description: Successful authentication
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    x-stoplight:
-                      id: 5qo98z0p3i77v
-                    description: The authentication token
+                $ref: '#/components/schemas/UserToken'
               examples:
                 Example 1:
                   value:
-                    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                    token:
+                      userId: 0
+                      username: string
+                      authToken: string
         '401':
           description: 'Unauthorized, invalid credentials'
           content:
@@ -100,3 +96,26 @@ components:
       required:
         - username
         - password
+    UserToken:
+      title: UserToken
+      x-stoplight:
+        id: c3mrxibrmiu5q
+      type: object
+      properties:
+        userId:
+          type: integer
+          x-stoplight:
+            id: nvjetxp7upzxn
+          format: int64
+          description: userId of the user
+        username:
+          type: string
+          x-stoplight:
+            id: mwffyl4dyzl81
+          description: username of the user
+        authToken:
+          type: string
+          x-stoplight:
+            id: u31kw3c0latcj
+          description: JWT Authentication token
+      description: 'Model for capturing and send auth token in response '

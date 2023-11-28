@@ -7,20 +7,26 @@ info:
   description: 'This Users API exposes endpoints to register new users and also view details of the existing users. '
 servers:
   - url: 'http://localhost:3000'
+tags:
+  - name: "User"
 paths:
   '/api/users/{userId}':
     parameters:
       - schema:
-          type: integer
+          type: string
         name: userId
         in: path
         required: true
-        description: ID of the user to be retrieved
+        description: username of the user to be retrieved
     get:
       summary: Retreive User Endpoint
+      tags:
+        - "User"
       x-stoplight:
         id: ewjg2v076ti3d
       description: Endpoint to retrieve user details based on the user ID.
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Successful response
@@ -30,11 +36,13 @@ paths:
                 $ref: '#/components/schemas/UserDetailsResponse'
         '404':
           description: User Not Found
-      operationId: get-api-users-userId
+      operationId: getUserById
   /api/users:
     post:
       summary: Create User Endpoint
-      operationId: post-api-users
+      tags:
+        - User
+      operationId: createUser
       responses:
         '201':
           description: User Successfully Registered
@@ -52,9 +60,15 @@ paths:
               $ref: '#/components/schemas/UserRegistrationRequest'
         description: Request object for new user registration
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     UserRegistrationRequest:
       type: object
+      x-builder: true
       x-examples:
         Example 1:
           username: john_doe
@@ -107,6 +121,7 @@ components:
       description: ''
     UserDetailsResponse:
       type: object
+      x-builder: true
       x-examples:
         Example 1:
           userId: 12345
