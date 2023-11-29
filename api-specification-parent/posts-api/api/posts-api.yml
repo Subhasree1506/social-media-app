@@ -1,0 +1,353 @@
+openapi: 3.0.0
+x-stoplight:
+  id: t23tonsmxbnoy
+info:
+  title: posts-api
+  version: '1.0'
+  description: 'This  API exposes endpoints to Authenticate User and return a token. '
+servers:
+  - url: 'http://localhost:3000'
+security:
+  - jwt_token: []
+tags:
+  - name: Posts
+paths:
+  /api/posts:
+    get:
+      summary: Retrieve  all posts with pagination
+      tags:
+        - Posts
+      operationId: getPosts
+      x-stoplight:
+        id: xcxs842x1l69b
+      description: Endpoint for retrieving all the posts after authentication
+      parameters:
+        - schema:
+            type: integer
+            minimum: 1
+            example: 1
+          in: query
+          name: page
+          description: Page number
+          required: false
+        - schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            example: 10
+          in: query
+          name: pageSize
+          description: Number of posts per page
+          required: false
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PostResponse'
+    post:
+      summary: Create a new Post
+      tags:
+        - Posts
+      operationId: createPost
+      responses:
+        '201':
+          description: Post created successfully
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Post created successfully
+        '400':
+          description: 'Bad Request, invalid input'
+          content:
+            application/json:
+              schema:
+                type: string
+      x-stoplight:
+        id: hzbq19ineet0t
+      description: Endpoint for creating a new social media post after authentication
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+        description: Request with post content
+  '/api/posts/{postId}':
+    parameters:
+      - schema:
+          type: integer
+        name: postId
+        in: path
+        required: true
+        description: post Id
+    get:
+      summary: Retrieve a specific post
+      operationId: getPostById
+      tags:
+        - Posts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostResponse'
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: string
+    put:
+      summary: Update a specific post
+      tags:
+        - Posts
+      operationId: updatePost
+      x-stoplight:
+        id: wd37as4p4kult
+      description: Update a specific post with postId
+      requestBody:
+        description: Updated text post details
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRequest'
+      responses:
+        '200':
+          description: Post Updated successfully
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: 'Bad Request, invalid input'
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: string
+    delete:
+      summary: Delete a specific post
+      tags:
+        - Posts
+      operationId: deletePost
+      responses:
+        '204':
+          description: Post Deleted successfully
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Post not found
+          content:
+            application/json:
+              schema:
+                type: string
+      x-stoplight:
+        id: 7r0kr4hunkh0h
+  '/api/posts/{postId}/comments':
+    parameters:
+      - schema:
+          type: string
+        name: postId
+        in: path
+        required: true
+    post:
+      summary: Add a comment for a post
+      tags:
+        - Posts
+      responses:
+        '201':
+          description: Comment added successfully
+          content:
+            application/json:
+              schema:
+                type: string
+        '400':
+          description: 'Bad Request, invalid input'
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Post not Found
+          content:
+            application/json:
+              schema:
+                type: string
+      operationId: addComment
+      x-stoplight:
+        id: xbd1wwg2c3w46
+      description: Adds a comment for the a post whose Id is given
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comments'
+        description: Comment request
+  '/api/posts/{postId}/likes':
+    parameters:
+      - schema:
+          type: integer
+        name: postId
+        in: path
+        required: true
+    post:
+      summary: Add a Like to a post
+      tags:
+        - Posts
+      operationId: addLike
+      responses:
+        '200':
+          description: Like added successfully
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Post not Found
+          content:
+            application/json:
+              schema:
+                type: string
+      x-stoplight:
+        id: yxzze8gwjhayk
+      description: Adds a like to a post based on the post Id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Likes'
+        description: Like request
+components:
+  securitySchemes:
+    jwt_token:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: JWT authentication with TTL
+  schemas:
+    PostRequest:
+      title: PostRequest
+      x-stoplight:
+        id: zwpkkzbmt753b
+      type: object
+      description: model to hold Posts content along with userId
+      properties:
+        postId:
+          type: integer
+          x-stoplight:
+            id: 3khj5qb9y66sn
+          format: int64
+          description: Id of the post
+        content:
+          type: string
+          x-stoplight:
+            id: mmqkqdn1x9gvi
+          description: Post's Content
+          maxLength: 500
+        userId:
+          type: integer
+          x-stoplight:
+            id: 95gok130enhw0
+          format: int64
+          description: Id of user who creates the post
+      required:
+        - content
+        - userId
+    PostResponse:
+      title: PostResponse
+      x-stoplight:
+        id: z60ctndzkooru
+      type: object
+      properties:
+        postId:
+          type: integer
+          x-stoplight:
+            id: i2of5c3608vp3
+          format: int64
+          description: post id
+        content:
+          type: string
+          x-stoplight:
+            id: 0kfychnkl6bxx
+          description: post content
+        comments:
+          x-stoplight:
+            id: zghwgxwyol3xk
+          type: array
+          description: Comments associated with the post
+          items:
+            $ref: '#/components/schemas/Comments'
+        likes:
+          type: array
+          x-stoplight:
+            id: r99f7bi0p0tlx
+          description: Likes associated with the post
+          items:
+            $ref: '#/components/schemas/Likes'
+    Comments:
+      title: Comment
+      x-stoplight:
+        id: pgwk15sfql94c
+      type: object
+      description: |
+        Comment for a specific post
+      properties:
+        commentId:
+          type: integer
+          x-stoplight:
+            id: q7zrm1zikr35h
+          format: int64
+          nullable: false
+        postId:
+          type: integer
+          x-stoplight:
+            id: di4yxsb6sjohx
+          format: int64
+          nullable: false
+        userId:
+          type: integer
+          x-stoplight:
+            id: joqqv0mzau1vi
+          format: int64
+          nullable: false
+        value:
+          type: string
+          x-stoplight:
+            id: 6k5vfoirmmdg7
+          maxLength: 500
+          nullable: false
+    Likes:
+      title: Likes
+      x-stoplight:
+        id: 2hli8m4120fwp
+      type: object
+      properties:
+        likeId:
+          type: integer
+          x-stoplight:
+            id: 9ppj4v6yx7v7d
+          format: int64
+        postId:
+          type: integer
+          x-stoplight:
+            id: r7mbac4cwy1qg
+          format: int64
+        userId:
+          type: integer
+          x-stoplight:
+            id: 35md8fbef4z79
+          format: int64
+      description: Likes Object

@@ -1,0 +1,121 @@
+openapi: 3.0.0
+x-stoplight:
+  id: h8nz4dugg21wn
+info:
+  title: auth-api.yml
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: Auth
+paths:
+  /api/auth:
+    post:
+      summary: ' Post request for autheniticating the user using username and password'
+      operationId: authenticateUser
+      tags:
+        - Auth
+      responses:
+        '200':
+          description: Successful authentication
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserToken'
+              examples:
+                Example 1:
+                  value:
+                    token:
+                      userId: 0
+                      username: string
+                      authToken: string
+        '401':
+          description: 'Unauthorized, invalid credentials'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    x-stoplight:
+                      id: 8qznw1uumf5oz
+                    description: Error message
+              examples:
+                Example 1:
+                  value:
+                    error: Invalid Credentials
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    x-stoplight:
+                      id: xy9p42689new4
+                    description: Error Message
+              examples:
+                Example 1:
+                  value:
+                    error: Internal Server Error
+      x-stoplight:
+        id: 2p6q0igiqvyl0
+      description: Authenticate a user and return a token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCredentials'
+        description: Request with user credentials sent for authentication
+components:
+  schemas:
+    UserCredentials:
+      title: UserCredentials
+      x-stoplight:
+        id: pbf98ffdf9ngi
+      type: object
+      description: Object for holding the user credentials username and password.
+      properties:
+        username:
+          type: string
+          x-stoplight:
+            id: tiv15zky8pifq
+          description: Username of the user
+        password:
+          type: string
+          x-stoplight:
+            id: ng2e6xzv1vxgo
+          description: Password of the user
+      x-examples:
+        Example 1:
+          username: john_doe
+          password: securePassword123
+      required:
+        - username
+        - password
+    UserToken:
+      title: UserToken
+      x-stoplight:
+        id: c3mrxibrmiu5q
+      type: object
+      properties:
+        userId:
+          type: integer
+          x-stoplight:
+            id: nvjetxp7upzxn
+          format: int64
+          description: userId of the user
+        username:
+          type: string
+          x-stoplight:
+            id: mwffyl4dyzl81
+          description: username of the user
+        authToken:
+          type: string
+          x-stoplight:
+            id: u31kw3c0latcj
+          description: JWT Authentication token
+      description: 'Model for capturing and send auth token in response '

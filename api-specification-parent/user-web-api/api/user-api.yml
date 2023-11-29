@@ -1,0 +1,171 @@
+openapi: 3.0.0
+x-stoplight:
+  id: 5xybmqw37lv2e
+info:
+  title: users-api
+  version: '1.0'
+  description: 'This Users API exposes endpoints to register new users and also view details of the existing users. '
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: "User"
+paths:
+  '/api/users/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: username of the user to be retrieved
+    get:
+      summary: Retreive User Endpoint
+      tags:
+        - "User"
+      x-stoplight:
+        id: ewjg2v076ti3d
+      description: Endpoint to retrieve user details based on the user ID.
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserDetailsResponse'
+        '404':
+          description: User Not Found
+      operationId: getUserById
+  /api/users:
+    post:
+      summary: Create User Endpoint
+      tags:
+        - User
+      operationId: createUser
+      responses:
+        '201':
+          description: User Successfully Registered
+        '400':
+          description: Bad Request - Invalid input
+        '409':
+          description: Conflict - User already exists
+      x-stoplight:
+        id: od4rcnhb8pgvn
+      description: API for New User Registration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRegistrationRequest'
+        description: Request object for new user registration
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    UserRegistrationRequest:
+      type: object
+      x-builder: true
+      x-examples:
+        Example 1:
+          username: john_doe
+          email: john.doe@example.com
+          password: securePassword123
+          fullname: John Doe
+          date_of_birth: '1990-01-15'
+          gender: male
+          bio: I'm an enthusiastic user of this platform!
+        Example 2:
+          username: alice_wonder
+          email: alice.wonder@example.com
+          password: strongPass456
+          fullname: Alice Wonderland
+          date_of_birth: '1985-07-22'
+          gender: female
+          bio: Exploring the wonders of technology and beyond!
+      properties:
+        username:
+          type: string
+          description: username of the User
+        email:
+          type: string
+          format: email
+          description: Email of the user
+        password:
+          type: string
+          description: Password of the User
+          format: password
+          minLength: 8
+          maxLength: 15
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$]).{8,15}$'
+        fullname:
+          type: string
+          description: Fullname of the User
+        date_of_birth:
+          type: string
+          format: date
+          description: Date of birth of the User
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+          description: Gender of the User
+        bio:
+          type: string
+          description: The brief Biography of the User
+      description: ''
+    UserDetailsResponse:
+      type: object
+      x-builder: true
+      x-examples:
+        Example 1:
+          userId: 12345
+          username: john_doe
+          email: john.doe@example.com
+          fullname: John Doe
+          date_of_birth: '1990-01-15'
+          gender: male
+          bio: I'm an enthusiastic user of this platform!
+        Example 2:
+          userId: 98765
+          username: alice_wonder
+          email: alice.wonder@example.com
+          fullname: Alice Wonderland
+          date_of_birth: '1985-07-22'
+          gender: female
+          bio: Exploring the wonders of technology and beyond!
+      properties:
+        userID:
+          type: integer
+          x-stoplight:
+            id: vumbw0ooewknw
+          format: int64
+        username:
+          type: string
+          description: username of the User
+        email:
+          type: string
+          format: email
+          description: Email of the user
+        fullname:
+          type: string
+          description: Fullname of the User
+        date_of_birth:
+          type: string
+          format: date
+          description: Date of birth of the User
+        gender:
+          type: string
+          enum:
+            - male
+            - female
+            - other
+          description: Gender of the User
+        bio:
+          type: string
+          description: The brief Biography of the User
