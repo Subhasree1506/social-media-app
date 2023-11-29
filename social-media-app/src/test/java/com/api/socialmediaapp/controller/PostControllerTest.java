@@ -84,14 +84,14 @@ class PostControllerTest {
 	@Test
 	void deletePost_ExistingPostId_ReturnsOk() {
 		int postId = 1;
-		when(postService.deletePost(postId)).thenReturn(ResponseEntity.ok("Post deleted successfully"));
+		when(postService.deletePost(postId,1)).thenReturn(ResponseEntity.ok("Post deleted successfully"));
 
 		ResponseEntity<String> response = postsController.deletePost(postId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("Post deleted successfully", response.getBody());
 
-		verify(postService, times(1)).deletePost(postId);
+		verify(postService, times(1)).deletePost(postId,1);
 	}
 
 	@Test
@@ -110,19 +110,20 @@ class PostControllerTest {
 
 	@Test
 	void updatePost_ValidPost_ReturnsOk() {
-		int postId = 1;
-		PostRequest postRequest = new PostRequest();
-		postRequest.setContent("Updated content");
+	    int postId = 1;
+	    PostRequest postRequest = new PostRequest();
+	    postRequest.setContent("Updated content");
 
-		when(postService.updatePost(postId, postRequest)).thenReturn("Post updated successfully");
+	    when(postService.updatePost(postId, postRequest)).thenReturn(ResponseEntity.ok("Post updated successfully"));
 
-		ResponseEntity<String> response = postsController.updatePost(postId, postRequest);
+	    ResponseEntity<String> response = postsController.updatePost(postId, postRequest);
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("Post updated successfully", response.getBody());
+	    assertEquals(HttpStatus.OK, response.getStatusCode());
+	    assertEquals("Post updated successfully", response.getBody());
 
-		verify(postService, times(1)).updatePost(postId, postRequest);
+	    verify(postService, times(1)).updatePost(postId, postRequest);
 	}
+
 
 	@Test
 	void updatePost_InvalidPost_ThrowsBadRequestException() {
@@ -164,17 +165,17 @@ class PostControllerTest {
 
 	@Test
 	void addLike_ValidLike_ReturnsCreated() {
-		int postId = 1;
-		Likes likes = new Likes();
+	    int postId = 1;
+	    Likes likes = new Likes();
 
-		when(postService.addLike(postId, likes)).thenReturn("Like added successfully");
+	    when(postService.addLike(postId, likes)).thenReturn(ResponseEntity.ok("Like added successfully"));
 
-		ResponseEntity<String> response = postsController.addLike(postId, likes);
+	    ResponseEntity<String> response = postsController.addLike(postId, likes);
 
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals("Like added successfully", response.getBody());
+	    assertEquals(HttpStatus.CREATED, response.getStatusCode());
+	    assertEquals("Like added successfully", response.getBody());
 
-		verify(postService, times(1)).addLike(postId, likes);
+	    verify(postService, times(1)).addLike(postId, likes);
 	}
 
 }

@@ -55,7 +55,7 @@ public class PostsController implements PostsApi {
     @Override
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable Integer postId) {
-        String message = postService.deletePost(postId).getBody();
+        String message = postService.deletePost(postId,1).getBody();
         logger.info(message);
         return ResponseEntity.ok(message);
     }
@@ -72,7 +72,7 @@ public class PostsController implements PostsApi {
     @PutMapping("/posts/{postId}")
     public ResponseEntity<String> updatePost(@PathVariable Integer postId, @RequestBody PostRequest postRequest) {
         isValidPost(postRequest.getContent());
-        String message = postService.updatePost(postId, postRequest);
+        String message = postService.updatePost(postId, postRequest).getBody();
         logger.info(message);
         return ResponseEntity.ok(message);
     }
@@ -93,8 +93,8 @@ public class PostsController implements PostsApi {
     @Override
     @PostMapping("/posts/{postId}/likes")
     public ResponseEntity<String> addLike(@PathVariable Integer postId, @RequestBody Likes likes) {
-        String message = postService.addLike(postId, likes);
-        logger.info(message);
-        return ResponseEntity.status(HttpStatus.CREATED).body(message);
+        ResponseEntity<String> message = postService.addLike(postId, likes);
+        logger.info(message.getBody());
+        return ResponseEntity.status(HttpStatus.CREATED).body(message.getBody());
     }
 }

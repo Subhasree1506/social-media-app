@@ -43,6 +43,14 @@ public class SocialMediaExceptionHandler {
 	        response.put("error", ex.getMessage());
 	        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
 	    }
+	    
+	    @ExceptionHandler(UnauthorizedException.class)
+	    @ResponseStatus(HttpStatus.NOT_FOUND)
+	    public ResponseEntity<Map<String, String>> handleUnauthorizedException(Exception ex) {
+	        Map<String, String> response = new HashMap<>();
+	        response.put("error", ex.getMessage());
+	        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+	    }
 
 	}
 

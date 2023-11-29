@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "users", schema = "socialmedia_App")
+@Table(name = "users", schema = "socialmedia_app")
 public class User {
 
     @Id

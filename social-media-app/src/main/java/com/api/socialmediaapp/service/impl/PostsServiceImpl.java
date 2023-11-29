@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.api.socialmediaapp.constant.SocialmediaConstant;
 import com.api.socialmediaapp.error.NotFoundException;
+import com.api.socialmediaapp.error.UnauthorizedException;
 import com.api.socialmediaapp.model.Comment;
 import com.api.socialmediaapp.model.Like;
 import com.api.socialmediaapp.model.Post;
@@ -42,7 +43,7 @@ public class PostsServiceImpl implements PostsService {
 	CommentRepository commentRepository;
 	@Autowired
 	LikesRepository likesRepository;
-
+	
 	@Override
 	public ResponseEntity<String> createPost(PostRequest postRequest) {
 
@@ -65,9 +66,7 @@ public class PostsServiceImpl implements PostsService {
 		Map<Integer, List<Comment>> commentsMap = getCommentsForPostList(postIds);
 		Map<Integer, List<Like>> likesMap = getLikesForPostList(postIds);
 
-		PostResponseInputs postsInput = PostResponseInputs.builder()
-				.commentList(commentsMap)
-				.likesList(likesMap)
+		PostResponseInputs postsInput = PostResponseInputs.builder().commentList(commentsMap).likesList(likesMap)
 				.postList(postList).build();
 
 		List<PostResponse> response = PostMapper.mapToPostResponses(postsInput);
@@ -86,10 +85,17 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public ResponseEntity<String> deletePost(Integer postId) {
-		if (postsRepository.existsById(postId)) {
-			postsRepository.deleteById(postId);
-			return new ResponseEntity<String>(SocialmediaConstant.POST_DELETED, HttpStatus.NO_CONTENT);
+	public ResponseEntity<String> deletePost(Integer postId, Integer userId) {
+
+		Optional<Post> post = postsRepository.findById(postId);
+		if (post.isPresent()) {
+			if (post.get().getUser().getUser_id() == userId.longValue()) {
+				postsRepository.deleteById(postId);
+				return new ResponseEntity<String>(SocialmediaConstant.POST_DELETED, HttpStatus.NO_CONTENT);
+			} else {
+				return new ResponseEntity<String>(SocialmediaConstant.USER_UNAUTHORIZED, HttpStatus.UNAUTHORIZED);
+
+			}
 		}
 		return new ResponseEntity<String>(SocialmediaConstant.POST_NOT_FOUND, HttpStatus.NOT_FOUND);
 	}
@@ -117,17 +123,23 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public String updatePost(Integer postId, PostRequest postRequest) {
+	public ResponseEntity<String> updatePost(Integer postId, PostRequest postRequest) {
 		Optional<Post> post = postsRepository.findById(postId);
-		post.ifPresentOrElse(p -> {
+		Post updatedPost;
+		if (post.isPresent()) {
+			if (post.get().getUser().getUser_id() == postRequest.getUserId().longValue()) {
+				updatedPost = post.get();
+				updatedPost.setContent(postRequest.getContent());
+				postsRepository.save(updatedPost);
+				return new ResponseEntity<String>(SocialmediaConstant.POST_DELETED, HttpStatus.NO_CONTENT);
+			} else {
+				throw new UnauthorizedException(SocialmediaConstant.USER_UPDATE_UNAUTHORIZED);
 
-			p.setContent(postRequest.getContent());
-			postsRepository.save(p);
-		}, () -> {
-			throw new NotFoundException(SocialmediaConstant.POST_NOT_FOUND);
-		});
+			}
+		}
 
-		return SocialmediaConstant.POST_UPDATED;
+		throw new NotFoundException(SocialmediaConstant.POST_NOT_FOUND);
+
 	}
 
 	@Override
@@ -146,17 +158,25 @@ public class PostsServiceImpl implements PostsService {
 	}
 
 	@Override
-	public String addLike(Integer postId, Likes likes) {
+	public ResponseEntity<String> addLike(Integer postId, Likes likes) {
 		Optional<Post> post = postsRepository.findById(postId);
-		post.ifPresentOrElse(p -> {
-			User user = userRepository.findById(likes.getUserId().intValue()).get();
-			Like postLike = Like.builder().post(p).user(user).build();
-			likesRepository.save(postLike);
-		}, () -> {
-			throw new NotFoundException(SocialmediaConstant.POST_NOT_FOUND);
-		});
 
-		return SocialmediaConstant.LIKE_ADDED;
+		if (post.isPresent()) {
+			User user = userRepository.findById(likes.getUserId().intValue()).get();
+			Optional<Like> postLike = likesRepository.findByPostId(postId);
+
+			if (postLike.isPresent()) {
+				throw new UnauthorizedException(SocialmediaConstant.LIKE_CONFLICT);
+
+			} else {
+				Like newLike = Like.builder().post(post.get()).user(user).build();
+				likesRepository.save(newLike);
+				return new ResponseEntity<String>(SocialmediaConstant.LIKE_ADDED, HttpStatus.CREATED);
+
+			}
+
+		}
+		throw new NotFoundException(SocialmediaConstant.POST_NOT_FOUND);
 	}
 
 }

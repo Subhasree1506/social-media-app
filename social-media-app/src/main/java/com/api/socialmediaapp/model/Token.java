@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-@Table(name = "Tokens", schema = "socialmedia_App")
+@Table(name = "Tokens", schema = "socialmedia_app")
 public class Token {
 
     @Id

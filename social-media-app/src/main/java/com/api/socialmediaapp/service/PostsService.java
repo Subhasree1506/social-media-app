@@ -16,10 +16,10 @@ public interface PostsService {
 	
 	public ResponseEntity<String> createPost(PostRequest postRequest);
 	public List<PostResponse> getPosts(Integer page, Integer pageSize);
-	public ResponseEntity<String> deletePost(Integer postId);
+	public ResponseEntity<String> deletePost(Integer postId,Integer userId);
 	public PostResponse getPostById(Integer postId);
-	public String updatePost(Integer postId, PostRequest postRequest);
+	public ResponseEntity<String> updatePost(Integer postId, PostRequest postRequest);
 	public String addComment(String postId, Comments comment);
-	public String addLike(Integer postId, Likes likes);
+	public ResponseEntity<String> addLike(Integer postId, Likes likes);
 
 }

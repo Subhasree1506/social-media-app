@@ -19,6 +19,10 @@ public class SocialmediaConstant {
 	public static final String INVALID_PASSWORD= "Invalid password";
 	public static final String LIKE_ADDED = "Like added successfully";
 	public static final String POST_CREATED="Post created successfully";
+	public static final String USER_UNAUTHORIZED = "User can only delete own posts";
+	public static final String USER_UPDATE_UNAUTHORIZED = "User can only update own posts";
+	public static final String LIKE_CONFLICT = "User already liked the post";
+
 
 
 	

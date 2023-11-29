@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.api.socialmediaapp.error.NotFoundException;
@@ -21,6 +22,9 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
+	/*
+	 * @Autowired PasswordEncoder passwordEncoder;
+	 */
 
 	/*
 	 * @Autowired PasswordEncoder passwordEncoder;
@@ -36,7 +40,8 @@ public class UserServiceImpl implements UserService {
 			throw new UserAlreadyExistsException("email", user.getEmail());
 		}
 
-		User newUser = User.builder().username(user.getUsername()).password_hash(user.getPassword())
+		User newUser = User.builder().username(user.getUsername()).password_hash(/* passwordEncoder.encode( */user
+				.getPassword())/* ) */
 				.date_of_birth(user.getDateOfBirth()).bio(user.getBio()).email(user.getEmail())
 				.full_name(user.getFullname()).gender(user.getGender().getValue()).build();
 

@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "Likes", schema = "socialmedia_App")
+@Table(name = "Likes", schema = "socialmedia_app")
 public class Like {
 
     @Id
